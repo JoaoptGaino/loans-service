@@ -1,0 +1,13 @@
+version: '3'
+services:
+  loans-service-db:
+    image: postgres
+    container_name: loans-service-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=loans_db
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
