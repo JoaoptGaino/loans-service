@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/customers")
-public record CustomerController(
+record CustomerController(
         CustomerService customerService) implements CrudCommonController<CustomerDTO, CustomerFormDTO, CustomerParamsDTO> {
 
     @GetMapping
