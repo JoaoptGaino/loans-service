@@ -14,10 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/loans")
-@RequiredArgsConstructor
-public class LoanController {
-    private final LoanService loanService;
-
+public record LoanController(LoanService loanService) {
     @GetMapping
     public ResponseEntity<List<LoanDTO>> findAll() {
         return ResponseEntity.ok(loanService.findAll());
