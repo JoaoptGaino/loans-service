@@ -10,11 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class LoanServiceImpl implements LoanService {
-
-    private final LoanRepository loanRepository;
-
+public record LoanServiceImpl(LoanRepository loanRepository) implements LoanService {
     @Override
     public List<LoanDTO> findAll() {
         return loanRepository.findAll().stream()

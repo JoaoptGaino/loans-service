@@ -1,5 +1,29 @@
 version: '3'
 services:
+  loans-service-app:
+    container_name: loans-service-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: loans-service-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://loans-service-db:5432/loans_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
+      - SPRING_FLYWAY_BASELINE-ON-MIGRATE=true
+      - SPRING_FLYWAY_LOCATIONS=classpath:db/migration
+      - SPRING_FLYWAY_SCHEMAS=public
+      - SPRING_JPA_GENERATE-DDL=true
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_APPLICATION_NAME=loans-service
+      - SERVER_PORT=8080
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    depends_on:
+      - loans-service-db
   loans-service-db:
     image: postgres
     container_name: loans-service-db
@@ -9,5 +33,11 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=loans_db
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  loans-sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    ports:
+      - "9000:9000"
+    restart: always

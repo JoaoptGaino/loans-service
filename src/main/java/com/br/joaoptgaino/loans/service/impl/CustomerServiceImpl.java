@@ -25,13 +25,9 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
-public class CustomerServiceImpl implements CustomerService {
-
-    private final CustomerRepository customerRepository;
-    private final LoanRepository loanRepository;
-
+public record CustomerServiceImpl(CustomerRepository customerRepository,
+                                  LoanRepository loanRepository) implements CustomerService {
     @Override
     public Page<CustomerDTO> findAll(Pageable pageable, CustomerParamsDTO paramsDTO) {
         List<CustomerDTO> customers = customerRepository.findAll(pageable)
@@ -87,7 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
                     LoanMapper.INSTANCE.loanToLoanDTO(loanRepository.findByLoanType(LoanType.GUARANTEED.toString())));
             userLoans.addAll(loans);
         } else if (customer.getIncome() >= 5000) {
-            Loan loan = loanRepository.findByLoanType("PERSONAL");
+            Loan loan = loanRepository.findByLoanType(LoanType.CONSIGNMENT.toString());
             userLoans.add(LoanMapper.INSTANCE.loanToLoanDTO(loan));
         }
         return userLoans;
